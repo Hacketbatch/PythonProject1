@@ -1,3 +1,9 @@
+# student managment system
+#john nyangara jnyangara303@gmail.com
+#teddy Kipkoech amdanyteddy@gmail.com
+#felix Onderi feonjunior8@gmail.com
+#kigen yego kigenyego@gmail.com
+
 import json
 import os
 import uuid
