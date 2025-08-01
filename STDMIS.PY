@@ -37,15 +37,14 @@ class Student:
             'grades': self.grades
         }
 
-
+#class containing methods to add delete search edit and display existing records
 class StudentManagementSystem:
     """Main class to manage student records and operations."""
-
     def __init__(self, filename: str = 'student.json'):
         self.filename = filename
         self.students: List[Student] = []
         self.load_students()
-
+    #function to load records for students from a json file
     def load_students(self) -> None:
         """Load students from JSON file."""
         try:
@@ -73,6 +72,7 @@ class StudentManagementSystem:
         except Exception as e:
             print(f"Error loading students: {e}")
 
+    #function to save a new student and his/her related details in the json file
     def save_students(self) -> None:
         """Save students to JSON file."""
         try:
@@ -82,6 +82,7 @@ class StudentManagementSystem:
         except Exception as e:
             print(f"Error saving students: {e}")
 
+    #function to add a new student to the json file student.json
     def add_student(self, name: str, age: int, class_name: str, subjects: List[str], grades: List[float]) -> None:
         """Add a new student to the system."""
         try:
@@ -96,6 +97,7 @@ class StudentManagementSystem:
         except ValueError as e:
             print(f"Error: {e}")
 
+    #function that reads data from the students json file and renders all details for each student
     def view_all_students(self) -> None:
         """Display all students' information."""
         if not self.students:
@@ -110,7 +112,7 @@ class StudentManagementSystem:
             print(f"Grades: {', '.join(map(str, student.grades))}")
             print(f"Average Grade: {student.calculate_average_grade():.2f}")
             print("-" * 30)
-
+    #function to search a student record based on name
     def search_student(self, search_term: str) -> Optional[Student]:
         """Search for a student by name or ID."""
         for student in self.students:
@@ -118,6 +120,7 @@ class StudentManagementSystem:
                 return student
         return None
 
+    #function that implements changes to an existing record
     def edit_student(self, student_id: str, name: Optional[str] = None, age: Optional[int] = None,
                      class_name: Optional[str] = None, subjects: Optional[List[str]] = None,
                      grades: Optional[List[float]] = None) -> None:
@@ -145,7 +148,7 @@ class StudentManagementSystem:
             print("Student updated successfully!")
         except ValueError as e:
             print(f"Error: {e}")
-
+    #funtion that deletes a students record  by providing student name
     def delete_student(self, student_id: str) -> None:
         """Delete a student from the system."""
         student = self.search_student(student_id)
@@ -155,7 +158,7 @@ class StudentManagementSystem:
             print("Student deleted successfully!")
         else:
             print("Student not found!")
-
+    #fuction that sorts the student records based on name or grade
     def sort_students(self, sort_by: str = 'name') -> List[Student]:
         """Sort students by name or average grade."""
         if sort_by == 'name':
@@ -164,7 +167,7 @@ class StudentManagementSystem:
             return sorted(self.students, key=lambda x: x.calculate_average_grade(), reverse=True)
         return self.students
 
-
+#function that renders command line interface for the user to choose an operation ,it acts as an interface between the user and the system(api)
 def run_cli():
     """Run the command-line interface for the student management system."""
     sms = StudentManagementSystem('student.json')  # Use student.json as requested
@@ -188,7 +191,7 @@ def run_cli():
         elif choice == '2':
             sms.view_all_students()
         elif choice == '3':
-            search_term = input("Enter name or ID to search: ")
+            search_term = input("Enter name to search: ")
             student = sms.search_student(search_term)
             if student:
                 print(f"Name: {student.name}")
@@ -200,7 +203,7 @@ def run_cli():
             else:
                 print("Student not found!")
         elif choice == '4':
-            student_id = input("Enter student ID to edit: ")
+            student_id = input("Enter student name to edit: ")
             name = input("Enter new name (press enter to skip): ") or None
             age_input = input("Enter new age (press enter to skip): ")
             age = int(age_input) if age_input else None
@@ -211,7 +214,7 @@ def run_cli():
             grades = [float(x) for x in grades_input.split(',')] if grades_input else None
             sms.edit_student(student_id, name, age, class_name, subjects, grades)
         elif choice == '5':
-            student_id = input("Enter student ID to delete: ")
+            student_id = input("Enter student name to delete: ")
             sms.delete_student(student_id)
         elif choice == '6':
             sort_by = input("Sort by (name/grade): ")
@@ -227,7 +230,7 @@ def run_cli():
             print("Invalid choice!")
 
 
-# Unit Tests
+# Unit Tests to check if all functions in the class student managment system are working and bug free
 class TestStudentManagementSystem(unittest.TestCase):
     def setUp(self):
         self.sms = StudentManagementSystem('test_student.json')
